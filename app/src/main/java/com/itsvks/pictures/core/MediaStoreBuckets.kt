@@ -1,0 +1,12 @@
+package com.itsvks.pictures.core
+
+enum class MediaStoreBuckets {
+  MEDIA_STORE_BUCKET_FAVORITES,
+  MEDIA_STORE_BUCKET_TRASH,
+  MEDIA_STORE_BUCKET_TIMELINE,
+  MEDIA_STORE_BUCKET_PLACEHOLDER,
+  MEDIA_STORE_BUCKET_PHOTOS,
+  MEDIA_STORE_BUCKET_VIDEOS;
+
+  val id = (-0x0000DEAD - ((ordinal + 1) shl 16)).toLong()
+}
