@@ -26,6 +26,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.DriveFileMove
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.CopyAll
 import androidx.compose.material.icons.outlined.DeleteOutline
@@ -63,6 +64,7 @@ import com.itsvks.pictures.R
 import com.itsvks.pictures.core.components.exif.CopyMediaSheet
 import com.itsvks.pictures.core.components.exif.MoveMediaSheet
 import com.itsvks.pictures.domains.MediaHandleUseCase
+import com.itsvks.pictures.extensions.isFavorite
 import com.itsvks.pictures.extensions.rememberActivityResult
 import com.itsvks.pictures.extensions.shareMedia
 import com.itsvks.pictures.models.AlbumState
@@ -176,13 +178,25 @@ fun SelectionSheet(
           context.shareMedia(selectedMedia)
         }
 
-        SelectionBarColumn(
-          imageVector = Icons.Outlined.FavoriteBorder,
-          tabletMode = tabletMode,
-          title = stringResource(R.string.favorite)
+        AnimatedVisibility(
+          visible = selectedMedia.size == 1 ||
+              selectedMedia.all { it.isFavorite } ||
+              selectedMedia.none { it.isFavorite }
         ) {
-          scope.launch {
-            handler.toggleFavorite(result = result, selectedMedia)
+          val isFavorite = if (selectedMedia.size == 1) {
+            selectedMedia.first().isFavorite
+          } else {
+            selectedMedia.all { it.isFavorite }
+          }
+
+          SelectionBarColumn(
+            imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+            tabletMode = tabletMode,
+            title = stringResource(R.string.favorite)
+          ) {
+            scope.launch {
+              handler.toggleFavorite(result = result, selectedMedia)
+            }
           }
         }
 

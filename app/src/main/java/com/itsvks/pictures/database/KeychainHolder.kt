@@ -18,12 +18,12 @@ class KeychainHolder @Inject constructor(
   companion object {
     const val VAULT_INFO_FILE_NAME = "info.vault"
     const val VAULT_INFO_FILE = "/$VAULT_INFO_FILE_NAME"
+  }
 
-    val masterKey by lazy {
-      MasterKey.Builder(PicturesApp.instance).apply {
-        setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
-      }.build()
-    }
+  val masterKey by lazy {
+    MasterKey.Builder(context).apply {
+      setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+    }.build()
   }
 
   val filesDir: File = context.filesDir

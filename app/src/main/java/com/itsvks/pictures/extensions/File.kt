@@ -24,7 +24,7 @@ import java.text.DecimalFormat
 )
 fun <T : Serializable> File.decrypt(
   context: Context = PicturesApp.instance,
-  key: MasterKey = KeychainHolder.masterKey,
+  key: MasterKey = KeychainHolder(context).masterKey,
 ): T = EncryptedFile.Builder(
   context,
   this,
@@ -42,7 +42,7 @@ fun <T : Serializable> File.decrypt(
 )
 fun <T : Serializable> File.encrypt(
   context: Context = PicturesApp.instance,
-  key: MasterKey = KeychainHolder.masterKey,
+  key: MasterKey = KeychainHolder(context).masterKey,
   data: T
 ) {
   EncryptedFile.Builder(

@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -70,7 +69,87 @@ fun SetupWizard(
       Image(
         painter = painter,
         contentDescription = painter.toString(),
-        modifier = Modifier.size(72.dp).clip(Shapes.large)
+        modifier = Modifier
+          .size(72.dp)
+          .clip(Shapes.large)
+      )
+
+      Text(
+        text = buildAnnotatedString {
+          val headLineMedium = MaterialTheme.typography.headlineMedium.toSpanStyle()
+          val bodyLarge = MaterialTheme.typography.bodyLarge.toSpanStyle()
+          val onSurfaceVariant = MaterialTheme.colorScheme.onSurfaceVariant
+
+          withStyle(style = ParagraphStyle(textAlign = TextAlign.Center)) {
+            withStyle(style = headLineMedium) {
+              append(title)
+            }
+            appendLine()
+            withStyle(
+              style = bodyLarge.copy(color = onSurfaceVariant)
+            ) {
+              append(subtitle)
+            }
+          }
+        }
+      )
+
+      Column(
+        modifier = Modifier
+          .padding(horizontal = 32.dp)
+          .padding(bottom = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(contentPadding),
+        horizontalAlignment = Alignment.CenterHorizontally
+      ) {
+        content()
+      }
+    }
+  }
+}
+
+@Composable
+fun SetupWizard(
+  modifier: Modifier = Modifier,
+  icon: ImageVector,
+  title: String,
+  subtitle: String,
+  contentPadding: Dp = 32.dp,
+  bottomBar: @Composable () -> Unit,
+  content: @Composable () -> Unit,
+) {
+  Scaffold(
+    modifier = modifier.fillMaxSize(),
+    bottomBar = {
+      Row(
+        modifier = Modifier
+          .fillMaxWidth()
+          .background(
+            color = MaterialTheme.colorScheme.surface
+          )
+          .navigationBarsPadding()
+          .padding(horizontal = 24.dp, vertical = 12.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
+      ) {
+        bottomBar()
+      }
+    }
+  ) { paddingValues ->
+    Column(
+      modifier = Modifier
+        .fillMaxWidth()
+        .padding(paddingValues)
+        .padding(top = 24.dp)
+        .verticalScroll(state = rememberScrollState()),
+      verticalArrangement = Arrangement.spacedBy(24.dp),
+      horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+
+      androidx.compose.material3.Icon(
+        imageVector = icon,
+        contentDescription = icon.name,
+        modifier = Modifier
+          .size(72.dp)
+          .clip(Shapes.large)
       )
 
       Text(
